@@ -5,7 +5,9 @@
 It adds three simple mappings:
 
 `<Leader>t`        - runs the tests for the current exercise.
+
 `<Leader><Leader>` - switches between source file and test file.
+
 `<Leader>r`        - opens the README.md
 
 ## Language support
