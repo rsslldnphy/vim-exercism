@@ -10,9 +10,11 @@ It adds three simple mappings:
 
 `<Leader>r`        - opens the README.md
 
+(You can set your `<Leader>` key to whatever you want. I use comma.)
+
 ## Language support
 
-Supports all languages (at time of writing) apart from C#, as I couldn't think of a nice way to automate the horrific process of building, linking and running the C# exercise, not least because there's no easy way to know where the nunit.framework.dll will be. Sorry, C-sharpers! Pull requests welcome ;-)
+Supports all languages (at time of writing) apart from C#, as I couldn't think of a nice way to automate the horrific process of building, linking and running the C# exercise, not least because there's no easy way to know where the `nunit.framework.dll` will be. Sorry, C-sharpers! Pull requests welcome ;-)
 
 ## OCaml Exception
 
