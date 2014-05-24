@@ -10,7 +10,7 @@ function Exercism::Setup()
 
   "" Ocaml nicks the <leader>t binding for itself,
   "" so use <leader>m (for make) instead.
-  if Exercism::Track() =~ "ocaml"
+  if Exercism::Track() == "ocaml"
     nnoremap <leader>m :call Exercism::RunTests()<cr>
   endif
 endfunction
@@ -56,18 +56,18 @@ endfunction
 
 function Exercism::TestFile()
   let track = Exercism::Track()
-  if     track =~ "clojure"      | let pattern = "*_test.clj"
-  elseif track =~ "coffeescript" | let pattern = "*test.spec.coffee"
-  elseif track =~ "elixir"       | let pattern = "*_test.exs"
-  elseif track =~ "go"           | let pattern = "*_test.go"
-  elseif track =~ "haskell"      | let pattern = "*_test.hs"
-  elseif track =~ "javascript"   | let pattern = "*test.spec.js"
-  elseif track =~ "objective-c"  | let pattern = "*Test.m"
-  elseif track =~ "ocaml"        | let pattern = "*test.ml"
-  elseif track =~ "perl5"        | let pattern = "*.t"
-  elseif track =~ "python"       | let pattern = "*_test.py"
-  elseif track =~ "ruby"         | let pattern = "*_test.rb"
-  elseif track =~ "scala"
+  if     track == "clojure"      | let pattern = "*_test.clj"
+  elseif track == "coffeescript" | let pattern = "*test.spec.coffee"
+  elseif track == "elixir"       | let pattern = "*_test.exs"
+  elseif track == "go"           | let pattern = "*_test.go"
+  elseif track == "haskell"      | let pattern = "*_test.hs"
+  elseif track == "javascript"   | let pattern = "*test.spec.js"
+  elseif track == "objective-c"  | let pattern = "*Test.m"
+  elseif track == "ocaml"        | let pattern = "*test.ml"
+  elseif track == "perl5"        | let pattern = "*.t"
+  elseif track == "python"       | let pattern = "*_test.py"
+  elseif track == "ruby"         | let pattern = "*_test.rb"
+  elseif track == "scala"
     let scala_test_file = system("find . -name *.scala | grep test | head -n 1")
     return Exercism::StripDotSlash(Exercism::StripNewline(scala_test_file))
   endif
@@ -78,18 +78,18 @@ endfunction
 
 function Exercism::SourceFile()
   let track = Exercism::Track()
-  if     track =~ "clojure"      | let pattern = "*.clj"
-  elseif track =~ "coffeescript" | let pattern = "*.coffee"
-  elseif track =~ "elixir"       | let pattern = "*.exs"
-  elseif track =~ "go"           | let pattern = "*.go"
-  elseif track =~ "haskell"      | let pattern = "*.hs"
-  elseif track =~ "javascript"   | let pattern = "*.js"
-  elseif track =~ "objective-c"  | let pattern = "*.m"
-  elseif track =~ "ocaml"        | let pattern = "*.ml"
-  elseif track =~ "perl5"        | let pattern = "*.pm"
-  elseif track =~ "python"       | let pattern = "*.py"
-  elseif track =~ "ruby"         | let pattern = "*.rb"
-  elseif track =~ "scala"
+  if     track == "clojure"      | let pattern = "*.clj"
+  elseif track == "coffeescript" | let pattern = "*.coffee"
+  elseif track == "elixir"       | let pattern = "*.exs"
+  elseif track == "go"           | let pattern = "*.go"
+  elseif track == "haskell"      | let pattern = "*.hs"
+  elseif track == "javascript"   | let pattern = "*.js"
+  elseif track == "objective-c"  | let pattern = "*.m"
+  elseif track == "ocaml"        | let pattern = "*.ml"
+  elseif track == "perl5"        | let pattern = "*.pm"
+  elseif track == "python"       | let pattern = "*.py"
+  elseif track == "ruby"         | let pattern = "*.rb"
+  elseif track == "scala"
     let scala_source_file = system("find . -name *.scala | grep -v test | head -n 1")
     return Exercism::StripDotSlash(Exercism::StripNewline(scala_source_file))
   endif
