@@ -1,5 +1,9 @@
-autocmd VimEnter,BufRead,BufNewFile **exercism/*/* call Exercism::Setup()
+autocmd VimEnter,BufRead,BufNewFile **/exercism/*/*/* call Exercism::Setup()
 function Exercism::Setup()
+  if Exercism::Track() == "csharp"
+    "" CSharp doesn't work yet, sorry
+    return
+  endif
   nnoremap <leader>t :call Exercism::RunTests()<cr>
   nnoremap <leader>r :e README.md<cr>
   nnoremap <leader><leader> :call Exercism::SwapFiles()<cr>
@@ -8,11 +12,15 @@ function Exercism::Setup()
   "" so use <leader>m (for make) instead.
   if Exercism::Track() =~ "ocaml"
     nnoremap <leader>m :call Exercism::RunTests()<cr>
-  end
+  endif
 endfunction
 
 function Exercism::StripNewline(str)
   return a:str[0 : strlen(a:str) - 2]
+endfunction
+
+function Exercism::StripDotSlash(str)
+  return a:str[2 : strlen(a:str) - 1]
 endfunction
 
 function Exercism::Track()
@@ -30,7 +38,7 @@ function Exercism::TestCommand()
   elseif track == "javascript"   | return "jasmine-node "          . Exercism::TestFile()
   elseif track == "objective-c"  | return "objc "                  . Exercism::ObjectiveCExerciseName()
   elseif track == "ocaml"        | return "make"
-  elseif track == "perl5"        | return "prove "                 . Exercism::Perl5TestFile()
+  elseif track == "perl5"        | return "prove "                 . Exercism::TestFile()
   elseif track == "python"       | return "python "                . Exercism::TestFile()
   elseif track == "ruby"         | return "ruby "                  . Exercism::TestFile()
   elseif track == "scala"        | return "sbt test"
@@ -48,24 +56,23 @@ endfunction
 
 function Exercism::TestFile()
   let track = Exercism::Track()
-  if     track =~ "objective-c" | return Exercism::ObjectiveCTestFile()
-  elseif track =~ "perl5"       | return Exercism::Perl5TestFile()
-  else                          | return Exercism::GenericTestFile()
+  if     track =~ "clojure"      | let pattern = "*_test.clj"
+  elseif track =~ "coffeescript" | let pattern = "*test.spec.coffee"
+  elseif track =~ "elixir"       | let pattern = "*_test.exs"
+  elseif track =~ "go"           | let pattern = "*_test.go"
+  elseif track =~ "haskell"      | let pattern = "*_test.hs"
+  elseif track =~ "javascript"   | let pattern = "*test.spec.js"
+  elseif track =~ "objective-c"  | let pattern = "*Test.m"
+  elseif track =~ "ocaml"        | let pattern = "*test.ml"
+  elseif track =~ "perl5"        | let pattern = "*.t"
+  elseif track =~ "python"       | let pattern = "*_test.py"
+  elseif track =~ "ruby"         | let pattern = "*_test.rb"
+  elseif track =~ "scala"
+    let scala_test_file = system("find . -name *.scala | grep test | head -n 1")
+    return Exercism::StripDotSlash(Exercism::StripNewline(scala_test_file))
   endif
-endfunction
 
-function Exercism::GenericTestFile()
-  let test_file = system("find . -name \"*test.*\" | xargs basename | head -n 1")
-  return Exercism::StripNewline(test_file)
-endfunction
-
-function Exercism::Perl5TestFile()
-  let test_file = system("find . -name \"*.t\" | xargs basename | head -n 1")
-  return Exercism::StripNewline(test_file)
-endfunction
-
-function Exercism::ObjectiveCTestFile()
-  let test_file = system("find . -name \"*Test.m\" | xargs basename | head -n 1")
+  let test_file = system("find . -name \"" . pattern . "\" | xargs basename | head -n 1")
   return Exercism::StripNewline(test_file)
 endfunction
 
@@ -82,7 +89,9 @@ function Exercism::SourceFile()
   elseif track =~ "perl5"        | let pattern = "*.pm"
   elseif track =~ "python"       | let pattern = "*.py"
   elseif track =~ "ruby"         | let pattern = "*.rb"
-  elseif track =~ "scala"        | let pattern = "src/main/scala/**.scala"
+  elseif track =~ "scala"
+    let scala_source_file = system("find . -name *.scala | grep -v test | head -n 1")
+    return Exercism::StripDotSlash(Exercism::StripNewline(scala_source_file))
   endif
   let source_file = system("find . -name \"" . pattern . "\" | grep -v " . Exercism::TestFile() . " | xargs basename | head -n 1")
   return Exercism::StripNewline(source_file)
